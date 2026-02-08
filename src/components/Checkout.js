@@ -3,6 +3,7 @@ import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import * as Label from '@radix-ui/react-label';
 import { CreditCard, Package, MapPin } from 'lucide-react';
+import { createOrder } from '../service/orders.service';
 
 const Checkout = () => {
   const { cart, getCartTotal, clearCart } = useCart();
@@ -33,6 +34,20 @@ const Checkout = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleOrderCreation = async () => {
+    const payload = {
+      "amount": total+50,
+      "currency": "INR",
+      "receipt": "Receipt no. 1",
+      // "notes": {
+      //   "notes_key_1": "Tea, Earl Grey, Hot",
+      //   "notes_key_2": "Tea, Earl Grey… decaf."
+      // }
+    }
+    const order = await createOrder(payload)
+    console.log(order)
   };
 
   const handleShippingSubmit = (e) => {
@@ -321,6 +336,7 @@ const Checkout = () => {
                 <button
                   type="submit"
                   className="w-full bg-brand-purple-dark text-white font-bold py-2.5 sm:py-3 rounded-xl hover:bg-brand-purple transition-all transform hover:scale-105 shadow-md text-sm sm:text-base"
+                  onClick={handleOrderCreation}
                 >
                   Continue to Payment
                 </button>
